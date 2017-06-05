@@ -6,4 +6,4 @@
 6) Replace all from above step with the string Raymond
 7) Generate a ssh key
 8) Allow key from above step on BRAVO and CHARLIE listed in /app/hosts
-9) Backup /log/shakespeare-romeo-48.txt on BRAVO and CHARLIE and copy /log/shakespeare-romeo-48.txt to BRAVO and CHARLIE
+9) From ALPHA, backup /log/shakespeare-romeo-48.txt on BRAVO and CHARLIE and copy /log/shakespeare-romeo-48.txt to BRAVO and CHARLIE
