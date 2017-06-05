@@ -1,3 +1,5 @@
+#!/usr/local/bin/bash
+
 # Note attach IAM Role for reading ec2 perms
 
 instanceid=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
