@@ -134,7 +134,7 @@
       become: yes
       become_user: root
 
-    - name: Chmod /app/* and /log/*
+    - name: Chmod  644 /app/* and /log/*
       shell: chmod 644 {{ item }}/*
       with_items:
         - /app
