@@ -1,5 +1,7 @@
 ---
 ami: ami-3bd5da42
 region: us-west-2
+ec2user: ec2-user
 user: vzwuser
+profile_name: ec2_read
 ...

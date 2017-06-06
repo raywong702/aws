@@ -16,7 +16,7 @@
         count: 3
         group_id: sg-9f705be4
         image: "{{ ami }}"
-        instance_profile_name: ec2_read
+        instance_profile_name: "{{ profile_name }}"
         instance_type: t2.micro
         key_name: aws
         region: "{{ region }}"
@@ -70,7 +70,7 @@
       add_host:
         name: "{{ item }}"
         groups: target
-        ansible_user: ec2-user
+        ansible_user: "{{ ec2user }}"
       with_items:
         - "{{ sandbox| json_query('instances[*].public_ip') }}"
 
