@@ -9,6 +9,20 @@ ansible-playbook sandbox.yml
 ```yaml
 ansible-playbook terminate.yml
 ```
+### Aliases
+* Place into your .bash_rc or .bash_profile
+* Replace DIRECTORY accordingly
+```
+alias sandbox='cd DIRECTORY; ansible-playbook sandbox.yml'
+alias terminate='cd DIRECTORY; ansible-playbook terminate.yml'
+```
+* To run
+```
+sandbox
+```
+```
+terminate
+```
 
 ### Notes
 * Update "/Users/raymond/Projects/aws/" in ansible.cfg accordingly
@@ -42,12 +56,4 @@ ansible-vault encrypt secrets.yml
         }
     ]
 }
-```
-
-### Aliases
-* Place into your .bash_rc or .bash_profile
-* Replace DIRECTORY accordingly
-```
-alias sandbox='cd DIRECTORY; ansible-playbook sandbox.yml'
-alias terminate='cd DIRECTORY; ansible-playbook terminate.yml'
 ```
