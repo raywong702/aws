@@ -123,16 +123,19 @@
 
     - name: Touch old log files
       vars:
-        yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}2359"
-        twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}2359"
-        threedaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"3 day ago\"') }}2359"
-      shell: touch -t {{ item.time }} {{ item.file }}; chown {{ user }}:{{ user }} {{ item.file }}
+        yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
+        twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
+        threedaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"3 day ago\"') }}"
+      shell: touch -t {{ item.time }}2359 {{ item.file }}
+      args:
+        chdir: /log
       with_items:
         - { file: 'access_log.1240921107', time: "{{ yesterday }}" }
         - { file: 'access_log.3408210027', time: "{{ twodaysago }}" }
         - { file: 'access_log.3423032082', time: "{{ threedaysago }}" }
       become: yes
       become_user: root
+      register: touch
 
     - name: Chmod  644 /app/* and /log/*
       shell: chmod 644 {{ item }}/*
@@ -142,15 +145,7 @@
       become: yes
       become_user: root
 
-    - name: Chmod  644 /app/* and /log/*
-      shell: chmod 644 {{ item }}/*
-      with_items:
-        - /app
-        - /log
-      become: yes
-      become_user: root
-
-- name: Pring hosts
+- name: Print hosts
   hosts: localhost
 
   tasks:
