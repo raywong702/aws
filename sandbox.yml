@@ -61,7 +61,7 @@
 
     - name: Write hosts file
       vars:
-        contents: "ALPHA\t{{ sandbox.instances[0].public_ip }}\nBRAVO\t{{ sandbox.instances[1].public_ip }}\nCHARLIE\t{{ sandbox.instances[1].public_ip }}\n"
+        contents: "ALPHA\t{{ sandbox.instances[0].public_ip }}\nBRAVO\t{{ sandbox.instances[1].public_ip }}\nCHARLIE\t{{ sandbox.instances[2].public_ip }}\n"
       copy:
         content: "{{ contents }}"
         dest: "{{ playbook_dir }}/hosts"
@@ -94,7 +94,7 @@
 
     - name: Copy files
       copy:
-        dest: /app/assignment.txt
+        dest: "/app/{{ item }}"
         group: "{{ user }}"
         mode: 0644
         owner: "{{ user }}"
@@ -130,7 +130,7 @@
         today: "{{ lookup('pipe', 'date +%Y%m%d') }}"
         yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
         twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
-      shell: touch -t {{ item[1] }}.2359 {{ item[0] }}; chown {{ user }}:{{ user }} {{ item[0] }}
+      shell: touch -t {{ item[1] }}2359 {{ item[0] }}; chown {{ user }}:{{ user }} {{ item[0] }}
       with_items:
         - ['access_log.1240921107', "'{{ today }}'"]
         - ['access_log.3408210027', "'{{ yesterday }}'"]
