@@ -10,8 +10,10 @@ f=access_log.3423032082
 
 for i in `cat hosts | awk '{print $2}'`
 do
-    ssh -q vzwuser@$i "cd /log; touch error_log; touch access_log; \
-        touch -t $a $d; touch -t $b $e; touch -t $c $f"
+    ssh -i ~/Projects/aws/aws.pem -q ec2-user@$i "cd /log; \
+        sudo touch error_log; sudo touch access_log; \
+        sudo touch -t $a $d; sudo touch -t $b $e; \
+        sudo touch -t $c $f"
 done
 
 exit 0

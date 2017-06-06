@@ -1,9 +1,10 @@
-1) Find all 404s in /log/access_log*
+1) Find all 404s in the access logs under /log
 2) Find number of occurrences of above step
-3) Find all access logs older than June 3
+3) Find all access logs older than today's date
 4) Gzip result of above step
 5) Find all case insensitive occurrences of romeo in /log/shakespeare-romeo-48.txt
-6) Replace all from above step with the string Raymond
+6) Update the file from previous step by replacing all occurrences of case
+insensitive occurences of romeo with the string Raymond
 7) Generate a ssh key
 8) Allow key from above step on BRAVO and CHARLIE listed in /app/hosts
 9) From ALPHA, backup /log/shakespeare-romeo-48.txt on BRAVO and CHARLIE and copy /log/shakespeare-romeo-48.txt to BRAVO and CHARLIE
