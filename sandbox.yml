@@ -105,19 +105,18 @@
       become: yes
       become_user: root
 
-    - name: Touch log files
-      vars:
-        now: "{{ lookup('pipe', 'date +%Y%m%d%H%M') }}"
+    - name: Touch files
       file:
         group: "{{ user }}"
         mode: 0644
         owner: "{{ user }}"
-        path: "/log/{{ item }}"
+        path: "{{ item }}"
         state: touch
       with_items:
-        - error_log
-        - access_log
-        - shakespeare-romeo-48.txt
+        - /log/error_log
+        - /log/access_log
+        - /log/shakespeare-romeo-48.txt
+        - /app/assignment.txt
       become: yes
       become_user: root
 
