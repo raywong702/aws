@@ -1,0 +1,68 @@
+---
+- name: Create Sandbox
+  hosts: localhost
+
+  vars:
+    region: us-west-2
+
+  tasks:
+    - name: Import secrets
+      include_vars: "{{ playbook_dir }}/secrets.yml"
+
+    - name: Create EC2s
+      ec2:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        count: 3
+        group_id: sg-9f705be4
+        image: ami-3bd5da42
+        instance_profile_name: ec2_read
+        instance_type: t2.micro
+        key_name: aws
+        region: "{{ region }}"
+        wait: yes
+      register: sandbox
+
+    - name: Tag Alpha
+      ec2_tag:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        region: "{{ region }}"
+        resource: "{{ sandbox.instances[0].id }}"
+        state: present
+        tags:
+          Name: ALPHA
+          Type: sandbox
+
+    - name: Tag Bravo
+      ec2_tag:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        region: "{{ region }}"
+        resource: "{{ sandbox.instances[1].id }}"
+        state: present
+        tags:
+          Name: BRAVO
+          Type: sandbox
+
+    - name: Tag Charlie
+      ec2_tag:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        region: "{{ region }}"
+        resource: "{{ sandbox.instances[2].id }}"
+        state: present
+        tags:
+          Name: CHARLIE
+          Type: sandbox
+
+    - name: EC2 Details
+      debug: msg="{{ sandbox | json_query('instances[*].public_ip') }}"
+
+    - name: Write hosts file
+      vars:
+        contents: "ALPHA\t\t{{ sandbox.instances[0].public_ip }}\nBRAVO\t\t{{ sandbox.instances[1].public_ip }}\nCHARLIE\t{{ sandbox.instances[1].public_ip }}\n"
+      copy:
+        content: "{{ contents }}"
+        dest: "{{ playbook_dir }}/hosts"
+...
