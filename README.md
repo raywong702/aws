@@ -43,3 +43,11 @@ ansible-vault encrypt secrets.yml
     ]
 }
 ```
+
+### Aliases
+* Place into your .bash_rc or .bash_profile
+* Replace DIRECTORY accordingly
+```
+alias sandbox='cd DIRECTORY; ansible-playbook sandbox.yml'
+alias terminate='cd DIRECTORY; ansible-playbook terminate.yml'
+```
