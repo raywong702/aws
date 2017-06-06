@@ -131,7 +131,7 @@
         yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
         twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
       shell: touch -t {{ item[1] }}2359 {{ item[0] }}; chown {{ user }}:{{ user }} {{ item[0] }}
-      with_items:
+      with_nested:
         - ['access_log.1240921107', "'{{ today }}'"]
         - ['access_log.3408210027', "'{{ yesterday }}'"]
         - ['access_log.3423032082', "'{{ twodaysago }}'"]
