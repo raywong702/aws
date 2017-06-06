@@ -147,14 +147,8 @@
       with_items:
         - /app
         - /log
-
-    - name: Print hosts
-      vars:
-        alpha: "{{ groups['target'][0] }}"
-        bravo: "{{ groups['target'][1] }}"
-        charlie: "{{ groups['target'][2] }}"
-      debug: msg="ALPHA\t{{ alpha }}\nBRAVO\t{{ bravo }}\nCHARLIE\t{{ charlie }}"
-...
+      become: yes
+      become_user: root
 
     - name: Print hosts
       vars:
