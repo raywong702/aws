@@ -2,12 +2,12 @@
 - name: Create Sandbox
   hosts: localhost
 
-  vars:
-    region: us-west-2
-
   tasks:
-    - name: Import secrets
+    - name: Include secrets
       include_vars: "{{ playbook_dir }}/secrets.yml"
+
+    - name: Include import
+      include_vars: "{{ playbook_dir }}/import.yml"
 
     - name: Create EC2s
       ec2:
@@ -15,7 +15,7 @@
         aws_secret_key: "{{ secret_key }}"
         count: 3
         group_id: sg-9f705be4
-        image: ami-3bd5da42
+        image: "{{ ami }}"
         instance_profile_name: ec2_read
         instance_type: t2.micro
         key_name: aws
@@ -61,8 +61,80 @@
 
     - name: Write hosts file
       vars:
-        contents: "ALPHA\t\t{{ sandbox.instances[0].public_ip }}\nBRAVO\t\t{{ sandbox.instances[1].public_ip }}\nCHARLIE\t{{ sandbox.instances[1].public_ip }}\n"
+        contents: "ALPHA\t{{ sandbox.instances[0].public_ip }}\nBRAVO\t{{ sandbox.instances[1].public_ip }}\nCHARLIE\t{{ sandbox.instances[1].public_ip }}\n"
       copy:
         content: "{{ contents }}"
         dest: "{{ playbook_dir }}/hosts"
+
+    - name: Create target group
+      add_host:
+        name: "{{ item }}"
+        groups: target
+        ansible_user: ec2-user
+      with_items:
+        - "{{ sandbox| json_query('instances[*].public_ip') }}"
+
+    - name: Wait for ssh
+      wait_for:
+        host: "{{ item }}"
+        port: 22
+        state: started
+      with_items:
+        - "{{ sandbox| json_query('instances[*].public_ip') }}"
+
+- name: Update EC2s
+  hosts: target
+
+  tasks:
+    - name: Include import
+      include_vars: "{{ playbook_dir }}/import.yml"
+
+    - name: Ping
+      ping:
+
+    - name: Copy files
+      copy:
+        dest: /app/assignment.txt
+        group: "{{ user }}"
+        mode: 0644
+        owner: "{{ user }}"
+        src: "{{ playbook_dir }}/{{ item }}"
+      with_items:
+        - hosts
+        - assignment.txt
+      become: yes
+      become_user: root
+
+    - name: Touch log files
+      vars:
+        now: "{{ lookup('pipe', 'date +%Y%m%d%H%M') }}"
+        today: "{{ lookup('pipe', 'date +%Y%m%d') }}"
+        yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
+        twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
+      file:
+        group: "{{ user }}"
+        mode: 0644
+        owner: "{{ user }}"
+        path: "/log/{{ item }}"
+        state: touch
+      with_items:
+        - error_log
+        - access_log
+        - shakespeare-romeo-48.txt
+      become: yes
+      become_user: root
+
+    - name: Touch old log files
+      vars:
+        now: "{{ lookup('pipe', 'date +%Y%m%d%H%M') }}"
+        today: "{{ lookup('pipe', 'date +%Y%m%d') }}"
+        yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
+        twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
+      shell: touch -t {{ item[1] }}.2359 {{ item[0] }}; chown {{ user }}:{{ user }} {{ item[0] }}
+      with_items:
+        - ['access_log.1240921107', "'{{ today }}'"]
+        - ['access_log.3408210027', "'{{ yesterday }}'"]
+        - ['access_log.3423032082', "'{{ twodaysago }}'"]
+      become: yes
+      become_user: root
 ...

@@ -1,0 +1,28 @@
+---
+- name: Terminate Sandbox
+  hosts: localhost
+
+  tasks:
+    - name: Include secrets
+      include_vars: "{{ playbook_dir }}/secrets.yml"
+
+    - name: Include import
+      include_vars: "{{ playbook_dir }}/import.yml"
+
+    - name: Get ec2 facts
+      ec2_remote_facts:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        filters: tag:Type=sandbox
+        region: "{{ region }}"
+      register: sandbox
+
+    - name: Terminate sandbox
+      ec2:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        image: "{{ ami }}"
+        instance_id: "{{ sandbox | json_query('instances[*].id') }}"
+        region: "{{ region }}"
+        state: absent
+...
