@@ -27,7 +27,7 @@ terminate
 ### Notes
 * Update "/Users/raymond/Projects/aws/" in ansible.cfg accordingly
 * Update import.yml accordingly
-* secrets.yml is in the format
+* Update secrets.yml with your aws keys
 ```yaml
 access_key: THISISMYACCESSKEY
 secret_key: THISISMYSECRETKEY
