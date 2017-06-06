@@ -125,12 +125,12 @@
       vars:
         yesterday: "{{ lookup('pipe', 'date +%Y%m%d -d \"1 day ago\"') }}"
         twodaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
-        threedaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"2 day ago\"') }}"
+        threedaysago: "{{ lookup('pipe', 'date +%Y%m%d -d \"3 day ago\"') }}"
       shell: touch -t {{ item.time }}2359 {{ item.file }}; chown {{ user }}:{{ user }} {{ item.file }}
       with_items:
-        - "{ file: 'access_log.1240921107', time: '{{ yesterday }}' }"
-        - "{ file: 'access_log.3408210027', time: '{{ twodaysago }}' }"
-        - "{ file: 'access_log.3423032082', time: '{{ threedaysago }}' }"
+        - { file: 'access_log.1240921107', time: "{{ yesterday }}" }
+        - { file: 'access_log.3408210027', time: "{{ twodaysago }}" }
+        - { file: 'access_log.3423032082', time: "{{ threedaysago }}" }
       become: yes
       become_user: root
 
@@ -139,6 +139,22 @@
       with_items:
         - /app
         - /log
+      become: yes
+      become_user: root
+
+    - name: Chmod  644 /app/* and /log/*
+      shell: chmod 644 {{ item }}/*
+      with_items:
+        - /app
+        - /log
+
+    - name: Print hosts
+      vars:
+        alpha: "{{ groups['target'][0] }}"
+        bravo: "{{ groups['target'][1] }}"
+        charlie: "{{ groups['target'][2] }}"
+      debug: msg="ALPHA\t{{ alpha }}\nBRAVO\t{{ bravo }}\nCHARLIE\t{{ charlie }}"
+...
 
     - name: Print hosts
       vars:
