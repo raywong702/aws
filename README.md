@@ -25,6 +25,7 @@ ansible-vault encrypt secrets.yml
 * Place vault password inside vault_pass.txt mentioned in ansible.cfg
 
 ### AWS Notes
+* Requires role with the AmazonEC2ReadOnlyAccess policy defined in import.yml
 * Requires below policy
 ```json
 {
@@ -42,4 +43,3 @@ ansible-vault encrypt secrets.yml
     ]
 }
 ```
-* Requires role with the AmazonEC2ReadOnlyAccess policy defined in import.yml
