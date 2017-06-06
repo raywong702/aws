@@ -17,9 +17,9 @@ ansible-playbook terminate.yml
 access_key: THISISMYACCESSKEY
 secret_key: THISISMYSECRETKEY
 ```
-* To encypt secrypts.yml
+* To encrypt secrypts.yml
 ```yaml
 ansible-vault encrypt secrets.yml
 ```
-* place vault password inside vault_pass.txt mentioned in ansible.cfg
+* Place vault password inside vault_pass.txt mentioned in ansible.cfg
 
