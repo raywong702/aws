@@ -56,8 +56,8 @@
           Name: CHARLIE
           Type: sandbox
 
-    - name: EC2 Details
-      debug: msg="{{ sandbox | json_query('instances[*].public_ip') }}"
+#    - name: EC2 Details
+#      debug: msg="{{ sandbox | json_query('instances[*].public_ip') }}"
 
     - name: Write hosts file
       vars:
@@ -150,10 +150,15 @@
       become: yes
       become_user: root
 
+- name: Pring hosts
+  hosts: localhost
+
+  tasks:
     - name: Print hosts
       vars:
-        alpha: "{{ groups['target'][0] }}"
-        bravo: "{{ groups['target'][1] }}"
-        charlie: "{{ groups['target'][2] }}"
-      debug: msg="ALPHA\t{{ alpha }}\nBRAVO\t{{ bravo }}\nCHARLIE\t{{ charlie }}"
+        msg: 
+          - "alpha: {{ groups['target'][0] }}"
+          - "bravo: {{ groups['target'][1] }}"
+          - "charlie: {{ groups['target'][2] }}"
+      debug: msg="{{ msg }}"
 ...
