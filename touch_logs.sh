@@ -13,7 +13,8 @@ do
     ssh -i ~/Projects/aws/aws.pem -q ec2-user@$i "cd /log; \
         sudo touch error_log; sudo touch access_log; \
         sudo touch -t $a $d; sudo touch -t $b $e; \
-        sudo touch -t $c $f"
+        sudo touch -t $c $f; \
+        sudo touch shakespeare-romeo-48.txt"
 done
 
 exit 0
